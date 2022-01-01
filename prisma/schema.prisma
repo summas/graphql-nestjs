@@ -3,14 +3,16 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = "postgresql://postgres:postgres@localhost:5432/mydb?schema=public"
 }
 
 model User {
   id    Int     @id @default(autoincrement())
   email String  @unique
   name  String?
+  group Group?  @relation(fields: [groupId], references: [id])
+  groupId  Int?
   posts Post[]
 }
 
@@ -26,3 +28,8 @@ model Post {
   authorId  Int?
 }
 
+model Group {
+  id    Int     @id @default(autoincrement())
+  name  String?
+  users User[]
+}
